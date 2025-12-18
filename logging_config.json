@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "disable_existing_loggers": false,
+  "formatters": {
+    "json": {
+      "format": "{\"timestamp\": \"%(asctime)s\", \"level\": \"%(levelname)s\", \"logger\": \"%(name)s\", \"message\": \"%(message)s\"}",
+      "datefmt": "%Y-%m-%d %H:%M:%S"
+    },
+    "standard": {
+      "format": "%(asctime)s | %(levelname)-8s | %(name)-15s | %(message)s",
+      "datefmt": "%Y-%m-%d %H:%M:%S"
+    }
+  },
+  "handlers": {
+    "security_file": {
+      "class": "logging.handlers.RotatingFileHandler",
+      "filename": "logs/security_audit.log",
+      "maxBytes": 10485760,
+      "backupCount": 10,
+      "formatter": "json",
+      "level": "INFO"
+    },
+    "application_file": {
+      "class": "logging.handlers.RotatingFileHandler",
+      "filename": "logs/application.log",
+      "maxBytes": 10485760,
+      "backupCount": 5,
+      "formatter": "standard",
+      "level": "INFO"
+    },
+    "error_file": {
+      "class": "logging.handlers.RotatingFileHandler",
+      "filename": "logs/errors.log",
+      "maxBytes": 10485760,
+      "backupCount": 10,
+      "formatter": "standard",
+      "level": "ERROR"
+    },
+    "console": {
+      "class": "logging.StreamHandler",
+      "formatter": "standard",
+      "level": "INFO"
+    }
+  },
+  "loggers": {
+    "security": {
+      "handlers": ["security_file"],
+      "level": "INFO",
+      "propagate": false
+    },
+    "application": {
+      "handlers": ["application_file", "console"],
+      "level": "INFO",
+      "propagate": false
+    },
+    "werkzeug": {
+      "handlers": ["application_file"],
+      "level": "WARNING",
+      "propagate": false
+    }
+  },
+  "root": {
+    "handlers": ["application_file", "console", "error_file"],
+    "level": "INFO"
+  }
+}

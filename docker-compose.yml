@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  voiceverse:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - SECRET_KEY=${SECRET_KEY:-change-me-in-production}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - IP_HASH_SALT=${IP_HASH_SALT:-change-me-in-production}
+      - DEBUG=false
+      - SECURE_COOKIES=true
+      - USE_HTTPS=false
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./saved_audio:/app/saved_audio
+      - ./backups:/app/backups
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import requests; requests.get('http://localhost:5000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  monitoring:
+    build: .
+    command: python3 monitoring/alerting_system.py monitor --interval 300
+    environment:
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - ALERT_EMAIL=${ALERT_EMAIL}
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    depends_on:
+      - voiceverse
+    restart: unless-stopped
+
+volumes:
+  data:
+  logs:
+  saved_audio:
+  backups:

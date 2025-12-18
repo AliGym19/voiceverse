@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoiceVerse Mobile - Design Options</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 48px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 20px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        .option-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+
+        .option-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+        }
+
+        .option-number {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.7;
+            margin-bottom: 12px;
+        }
+
+        .option-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .option-description {
+            font-size: 16px;
+            line-height: 1.6;
+            opacity: 0.85;
+            margin-bottom: 20px;
+        }
+
+        .color-palette {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .color-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .features {
+            list-style: none;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .features li {
+            padding: 6px 0;
+        }
+
+        .features li::before {
+            content: "✓ ";
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+
+        .note {
+            text-align: center;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎨 VoiceVerse Mobile Design Options</h1>
+            <p class="subtitle">Choose your preferred design direction</p>
+        </header>
+
+        <div class="options-grid">
+            <!-- Option 1 -->
+            <a href="option1-soundwave.html" class="option-card">
+                <div class="option-number">Option 1</div>
+                <h2 class="option-title">🌊 Sound Wave Theme</h2>
+                <p class="option-description">Audio-visual design with dynamic wave patterns and glowing effects</p>
+                <div class="color-palette">
+                    <div class="color-dot" style="background: #00D9FF;"></div>
+                    <div class="color-dot" style="background: #6B46C1;"></div>
+                    <div class="color-dot" style="background: #9F7AEA;"></div>
+                </div>
+                <ul class="features">
+                    <li>Animated wave backgrounds</li>
+                    <li>Cyan & purple gradients</li>
+                    <li>Ripple hover effects</li>
+                    <li>Dark theme with neon accents</li>
+                </ul>
+            </a>
+
+            <!-- Option 2 -->
+            <a href="option2-glassmorphism.html" class="option-card">
+                <div class="option-number">Option 2</div>
+                <h2 class="option-title">💎 Glassmorphism Pro</h2>
+                <p class="option-description">Frosted glass effects with premium depth and smooth bouncy animations</p>
+                <div class="color-palette">
+                    <div class="color-dot" style="background: #FF6B9D;"></div>
+                    <div class="color-dot" style="background: #4ECDC4;"></div>
+                    <div class="color-dot" style="background: #FFE66D;"></div>
+                </div>
+                <ul class="features">
+                    <li>Frosted glass blur effects</li>
+                    <li>Floating gradient blobs</li>
+                    <li>Premium depth layers</li>
+                    <li>Playful color palette</li>
+                </ul>
+            </a>
+
+            <!-- Option 3 -->
+            <a href="option3-minimal-gradient.html" class="option-card">
+                <div class="option-number">Option 3</div>
+                <h2 class="option-title">✨ Minimal Gradient</h2>
+                <p class="option-description">Clean, modern design with colorful accents on light background</p>
+                <div class="color-palette">
+                    <div class="color-dot" style="background: #667EEA;"></div>
+                    <div class="color-dot" style="background: #F093FB;"></div>
+                    <div class="color-dot" style="background: #FFFFFF; border-color: #667EEA;"></div>
+                </div>
+                <ul class="features">
+                    <li>Light theme with white space</li>
+                    <li>Blue-purple gradients</li>
+                    <li>Subtle soft shadows</li>
+                    <li>Clean, professional look</li>
+                </ul>
+            </a>
+
+            <!-- Option 4 -->
+            <a href="option4-neon-voice.html" class="option-card">
+                <div class="option-number">Option 4</div>
+                <h2 class="option-title">⚡ Neon Voice</h2>
+                <p class="option-description">Cyberpunk-inspired with neon glows and angular shapes</p>
+                <div class="color-palette">
+                    <div class="color-dot" style="background: #00FFF5;"></div>
+                    <div class="color-dot" style="background: #FF00FF;"></div>
+                    <div class="color-dot" style="background: #B026FF;"></div>
+                </div>
+                <ul class="features">
+                    <li>Animated grid background</li>
+                    <li>Neon cyan & magenta</li>
+                    <li>Angular clipped shapes</li>
+                    <li>Futuristic cyberpunk aesthetic</li>
+                </ul>
+            </a>
+
+            <!-- Option 5 -->
+            <a href="option5-warm-professional.html" class="option-card">
+                <div class="option-number">Option 5</div>
+                <h2 class="option-title">🎨 Warm & Professional</h2>
+                <p class="option-description">Inviting, trustworthy design that feels human and welcoming</p>
+                <div class="color-palette">
+                    <div class="color-dot" style="background: #FF6B6B;"></div>
+                    <div class="color-dot" style="background: #FFA07A;"></div>
+                    <div class="color-dot" style="background: #98D8C8;"></div>
+                </div>
+                <ul class="features">
+                    <li>Warm off-white background</li>
+                    <li>Coral & sage color palette</li>
+                    <li>Organic rounded shapes</li>
+                    <li>Friendly, approachable feel</li>
+                </ul>
+            </a>
+
+            <!-- Option 6 - Custom Mix -->
+            <a href="option6-cyber-aero.html" class="option-card" style="border: 3px solid rgba(0, 229, 255, 0.6); background: rgba(255, 255, 255, 0.15);">
+                <div class="option-number" style="color: #00E5FF;">Option 6 - Custom Mix ⚡</div>
+                <h2 class="option-title" style="background: linear-gradient(135deg, #00E5FF, #00FFA3); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">💎 Cyber Aero</h2>
+                <p class="option-description">Neon Voice Cyberpunk × Frutiger Aero fusion with glossy bubbles and cyber glows</p>
+                <div class="color-palette">
+                    <div class="color-dot" style="background: #00E5FF; box-shadow: 0 0 20px rgba(0, 229, 255, 0.6);"></div>
+                    <div class="color-dot" style="background: #00FFA3; box-shadow: 0 0 20px rgba(0, 255, 163, 0.6);"></div>
+                    <div class="color-dot" style="background: #0099FF;"></div>
+                </div>
+                <ul class="features">
+                    <li>Neon aqua & green gradients</li>
+                    <li>Glossy Frutiger Aero surfaces</li>
+                    <li>Floating bubble elements</li>
+                    <li>Cyber grid + optimistic feel</li>
+                </ul>
+            </a>
+        </div>
+
+        <div class="note">
+            <strong>👆 Click any card to see the full interactive preview</strong>
+            <br><br>
+            Each preview includes all UI elements with working interactions: text input, voice selection, speed controls, and audio player. Test the hover effects, button clicks, and animations to get a feel for each design.
+        </div>
+    </div>
+</body>
+</html>

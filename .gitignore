@@ -1,0 +1,92 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.env.local
+
+# Knowledge graph memory data (contains session-specific data)
+.aim/
+
+# Claude Code project-specific configuration (contains local skills and settings)
+.claude/
+
+# Database
+voiceverse.db
+*.db
+*.sqlite
+*.sqlite3
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+venv*/
+ENV/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Audio files (user generated content)
+saved_audio/
+*.mp3
+*.wav
+uploads/
+
+# Logs
+logs/
+*.log
+app.log
+
+# SSL certificates
+certs/*.key
+certs/*.pem
+!certs/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-*
+
+# OS
+.DS_Store
+Thumbs.db
+*~
+
+# Testing
+.coverage
+coverage.xml
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Node modules (if any frontend build tools)
+node_modules/
+package-lock.json
+
+# Backup files
+*.bak
+*.bak*
+*.backup
+*.backup*
+*.old
+*.old_*
+*.before_restore
+*~
+
+# MCP configuration (local settings)
+.mcp.json
+
+# Session files
+flask_session/
+sessions/

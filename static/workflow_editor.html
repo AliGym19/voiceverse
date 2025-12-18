@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workflow Editor - VoiceVerse</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #131729;
+            --bg-card: #1a1f3a;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --green: #10b981;
+            --yellow: #f59e0b;
+            --border: #2d3448;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow: hidden;
+        }
+
+        .container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--green);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-back {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-back:hover {
+            background: var(--border);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .workflow-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .workflow-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .workflow-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(99, 102, 241, 0.2);
+        }
+
+        .workflow-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .workflow-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .workflow-desc {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .workflow-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .workflow-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--green);
+        }
+
+        .status-draft {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--yellow);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state-desc {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>⚡ Workflow Editor</h1>
+            <div class="header-actions">
+                <button class="btn btn-primary" onclick="createWorkflow()">+ New Workflow</button>
+                <a href="/settings" class="btn btn-back">← Back to Settings</a>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="section-title">📋 Your Workflows</div>
+
+            <div class="workflow-grid" id="workflowGrid">
+                <!-- Workflows will be loaded here -->
+            </div>
+
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-state-icon">⚡</div>
+                <div class="empty-state-title">No Workflows Yet</div>
+                <div class="empty-state-desc">Create your first automated workflow to streamline your TTS generation process.</div>
+                <button class="btn btn-primary" onclick="createWorkflow()">Create Your First Workflow</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Load workflows from API
+        async function loadWorkflows() {
+            try {
+                const response = await fetch('/api/workflow/workflows');
+                const data = await response.json();
+
+                const grid = document.getElementById('workflowGrid');
+                const emptyState = document.getElementById('emptyState');
+
+                if (data.workflows && data.workflows.length > 0) {
+                    grid.innerHTML = data.workflows.map(workflow => `
+                        <div class="workflow-card" onclick="editWorkflow('${workflow.id}')">
+                            <div class="workflow-header">
+                                <div>
+                                    <div class="workflow-title">${workflow.name}</div>
+                                    <span class="workflow-status ${workflow.is_active ? 'status-active' : 'status-draft'}">
+                                        ${workflow.is_active ? 'Active' : 'Draft'}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="workflow-desc">${workflow.description || 'No description'}</div>
+                            <div class="workflow-meta">
+                                <span>📅 ${new Date(workflow.created_at).toLocaleDateString()}</span>
+                                <span>🔧 ${workflow.nodes ? workflow.nodes.length : 0} nodes</span>
+                            </div>
+                        </div>
+                    `).join('');
+                    emptyState.style.display = 'none';
+                } else {
+                    grid.innerHTML = '';
+                    emptyState.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error loading workflows:', error);
+                document.getElementById('emptyState').style.display = 'block';
+            }
+        }
+
+        function createWorkflow() {
+            // Redirect to AI Agent Editor to create new workflow
+            window.location.href = '/ai-agents';
+        }
+
+        function editWorkflow(id) {
+            // Redirect to AI Agent Editor with workflow ID
+            window.location.href = `/ai-agents?workflow=${id}`;
+        }
+
+        // Load workflows on page load
+        loadWorkflows();
+    </script>
+</body>
+</html>

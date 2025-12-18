@@ -1,0 +1,213 @@
+# VoiceVerse Nginx Configuration Example
+# Production reverse proxy configuration with SSL/TLS
+#
+# Location: /etc/nginx/sites-available/voiceverse
+# Enable: sudo ln -s /etc/nginx/sites-available/voiceverse /etc/nginx/sites-enabled/
+# Test: sudo nginx -t
+# Reload: sudo systemctl reload nginx
+
+# Redirect HTTP to HTTPS
+server {
+    listen 80;
+    listen [::]:80;
+    server_name yourdomain.com www.yourdomain.com;
+
+    # Let's Encrypt ACME challenge
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    # Redirect all HTTP traffic to HTTPS
+    location / {
+        return 301 https://$server_name$request_uri;
+    }
+}
+
+# HTTPS Server
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name yourdomain.com www.yourdomain.com;
+
+    # SSL Configuration (Let's Encrypt)
+    ssl_certificate /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
+
+    # SSL Settings (Mozilla Modern Configuration)
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384';
+    ssl_prefer_server_ciphers off;
+
+    # SSL Session Cache
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:SSL:50m;
+    ssl_session_tickets off;
+
+    # OCSP Stapling
+    ssl_stapling on;
+    ssl_stapling_verify on;
+    ssl_trusted_certificate /etc/letsencrypt/live/yourdomain.com/chain.pem;
+
+    # DNS Resolver (Google DNS)
+    resolver 8.8.8.8 8.8.4.4 valid=300s;
+    resolver_timeout 5s;
+
+    # Security Headers
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
+    add_header X-Frame-Options "DENY" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "no-referrer-when-downgrade" always;
+
+    # Content Security Policy (adjust based on your needs)
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';" always;
+
+    # Logging
+    access_log /var/log/nginx/voiceverse_access.log;
+    error_log /var/log/nginx/voiceverse_error.log;
+
+    # Max Upload Size (for audio files)
+    client_max_body_size 16M;
+
+    # Timeouts
+    proxy_connect_timeout 60s;
+    proxy_send_timeout 60s;
+    proxy_read_timeout 60s;
+
+    # Static Files (if serving from Nginx)
+    location /static {
+        alias /var/www/voiceverse/static;
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # Saved Audio Files
+    location /saved_audio {
+        alias /var/www/voiceverse/saved_audio;
+        expires 1h;
+        add_header Cache-Control "private, must-revalidate";
+    }
+
+    # Proxy to Flask Application
+    location / {
+        # Proxy to Flask app running on localhost:5000
+        proxy_pass http://127.0.0.1:5000;
+
+        # Proxy Headers
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Port $server_port;
+
+        # WebSocket Support (if needed)
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+
+        # Buffering
+        proxy_buffering off;
+        proxy_request_buffering off;
+    }
+
+    # Health Check Endpoint
+    location /health {
+        access_log off;
+        proxy_pass http://127.0.0.1:5000/health;
+    }
+}
+
+# ======================================================================
+# INSTALLATION AND SETUP INSTRUCTIONS
+# ======================================================================
+#
+# 1. Install Nginx:
+#    sudo apt-get update
+#    sudo apt-get install nginx
+#
+# 2. Install Certbot (Let's Encrypt):
+#    sudo apt-get install certbot python3-certbot-nginx
+#
+# 3. Configure DNS:
+#    Point your domain's A record to your server's IP address
+#
+# 4. Obtain SSL Certificate:
+#    sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+#
+# 5. Copy this configuration:
+#    sudo cp nginx.conf.example /etc/nginx/sites-available/voiceverse
+#    sudo ln -s /etc/nginx/sites-available/voiceverse /etc/nginx/sites-enabled/
+#
+# 6. Update configuration:
+#    - Replace 'yourdomain.com' with your actual domain
+#    - Adjust paths if application is in different location
+#    - Update proxy_pass port if Flask runs on different port
+#
+# 7. Test configuration:
+#    sudo nginx -t
+#
+# 8. Reload Nginx:
+#    sudo systemctl reload nginx
+#
+# 9. Enable Nginx on boot:
+#    sudo systemctl enable nginx
+#
+# 10. Set up automatic certificate renewal:
+#     sudo systemctl status certbot.timer
+#     (Certbot automatically creates a systemd timer for renewal)
+#
+# 11. Configure Firewall:
+#     sudo ufw allow 'Nginx Full'
+#     sudo ufw delete allow 'Nginx HTTP'
+#
+# ======================================================================
+# FLASK APPLICATION CONFIGURATION
+# ======================================================================
+#
+# When using Nginx as reverse proxy with SSL termination:
+#
+# In your .env.production file, set:
+#   USE_HTTPS=false        # Nginx handles SSL, not Flask
+#   SECURE_COOKIES=true    # Still use secure cookies
+#   HOST=127.0.0.1        # Only listen on localhost
+#   PORT=5000             # Match the proxy_pass port above
+#
+# The Flask app should trust the X-Forwarded-* headers from Nginx.
+# Install ProxyFix if needed:
+#   pip install werkzeug
+#
+# Then in your Flask app (tts_app19.py):
+#   from werkzeug.middleware.proxy_fix import ProxyFix
+#   app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
+#
+# ======================================================================
+# SYSTEMD SERVICE
+# ======================================================================
+#
+# Create /etc/systemd/system/voiceverse.service:
+#
+# [Unit]
+# Description=VoiceVerse TTS Application
+# After=network.target
+#
+# [Service]
+# Type=simple
+# User=www-data
+# Group=www-data
+# WorkingDirectory=/var/www/voiceverse
+# Environment="PATH=/var/www/voiceverse/venv/bin"
+# ExecStart=/var/www/voiceverse/venv/bin/python3 tts_app19.py
+# Restart=always
+# RestartSec=10
+#
+# [Install]
+# WantedBy=multi-user.target
+#
+# Enable and start:
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable voiceverse
+#   sudo systemctl start voiceverse
+#   sudo systemctl status voiceverse
+#
+# ======================================================================

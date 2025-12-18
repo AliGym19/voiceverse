@@ -1,0 +1,1634 @@
+/* Windows Vista/7 Aero Glass Theme for VoiceVerse */
+
+/* ==========================================================================
+   CSS Reset and Base Styles
+   ========================================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ==========================================================================
+   CSS Variables
+   ========================================================================== */
+
+:root {
+    /* Primary Green Palette */
+    --aero-green-vivid: #7fff00;
+    --aero-green-bright: #00ff00;
+    --aero-green-medium: #33ff33;
+    --aero-green-light: #66ff66;
+    --aero-green-pale: #99ff99;
+    --aero-green-dark: #4fcf00;
+
+    /* Background Blues */
+    --aero-blue-dark: #0a1929;
+    --aero-blue-mid-dark: #1e3c72;
+    --aero-blue-mid: #2a5298;
+    --aero-blue-light: #3d7eaa;
+    --aero-blue-bright: #56a5eb;
+
+    /* Glass and UI Colors */
+    --aero-glass: rgba(255, 255, 255, 0.95);
+    --aero-glass-light: rgba(255, 255, 255, 0.85);
+    --aero-glass-dark: rgba(42, 42, 42, 0.98);
+    --aero-shadow: rgba(0, 0, 0, 0.3);
+
+    /* Voice-specific Gradients */
+    --voice-alloy-from: #ffd4e1;
+    --voice-alloy-to: #ffa0b4;
+    --voice-echo-from: #e1d4ff;
+    --voice-echo-to: #b0a0ff;
+    --voice-fable-from: #fff4d4;
+    --voice-fable-to: #ffd8a0;
+    --voice-nova-from: #d4f4ff;
+    --voice-nova-to: #a0d8ff;
+    --voice-onyx-from: #e8e8e8;
+    --voice-onyx-to: #b8b8b8;
+    --voice-shimmer-from: #ffe4ff;
+    --voice-shimmer-to: #ffb0ff;
+}
+
+/* ==========================================================================
+   Body and Background
+   ========================================================================== */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg,
+        var(--aero-blue-dark) 0%,
+        var(--aero-blue-mid-dark) 25%,
+        var(--aero-blue-mid) 50%,
+        var(--aero-blue-light) 75%,
+        var(--aero-blue-bright) 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animated Background Elements */
+.aero-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.4;
+    animation: floatOrb 20s ease-in-out infinite;
+}
+
+.orb-1 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(124, 252, 0, 0.8) 0%, transparent 70%);
+    top: -10%;
+    left: -10%;
+    animation-duration: 25s;
+}
+
+.orb-2 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(0, 255, 127, 0.7) 0%, transparent 70%);
+    top: 50%;
+    right: -5%;
+    animation-duration: 30s;
+    animation-delay: -5s;
+}
+
+.orb-3 {
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(64, 224, 208, 0.6) 0%, transparent 70%);
+    bottom: 10%;
+    left: 20%;
+    animation-duration: 35s;
+    animation-delay: -10s;
+}
+
+.orb-4 {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(50, 205, 50, 0.5) 0%, transparent 70%);
+    top: 30%;
+    right: 30%;
+    animation-duration: 40s;
+    animation-delay: -15s;
+}
+
+.aurora-effect {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(ellipse at 20% 30%, rgba(64, 224, 208, 0.3) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(124, 252, 0, 0.25) 0%, transparent 50%);
+    animation: aurora 15s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+
+@keyframes floatOrb {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+    }
+    25% {
+        transform: translate(50px, -30px) scale(1.1);
+    }
+    50% {
+        transform: translate(-30px, 50px) scale(0.9);
+    }
+    75% {
+        transform: translate(40px, 20px) scale(1.05);
+    }
+}
+
+@keyframes aurora {
+    0%, 100% {
+        opacity: 0.3;
+        transform: scale(1) rotate(0deg);
+    }
+    25% {
+        opacity: 0.5;
+        transform: scale(1.1) rotate(90deg);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.2) rotate(180deg);
+    }
+    75% {
+        opacity: 0.4;
+        transform: scale(1.05) rotate(270deg);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 40px rgba(0, 255, 0, 0.8);
+    }
+}
+
+@keyframes scanline {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.6),
+                    0 0 20px rgba(0, 255, 0, 0.4),
+                    0 0 30px rgba(0, 255, 0, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.9),
+                    0 0 40px rgba(0, 255, 0, 0.6),
+                    0 0 60px rgba(0, 255, 0, 0.3);
+    }
+}
+
+/* ==========================================================================
+   Main Window Container
+   ========================================================================== */
+
+.aero-window {
+    width: 95%;
+    max-width: 1400px;
+    min-width: 800px;
+    height: 90vh;
+    max-height: 900px;
+    background: var(--aero-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 12px 12px 0 0;
+    box-shadow:
+        0 10px 60px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.2),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 10;
+    overflow: hidden;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .aero-window {
+        width: 98%;
+        min-width: 700px;
+    }
+}
+
+@media (max-height: 800px) {
+    .aero-window {
+        height: 95vh;
+        max-height: none;
+    }
+}
+
+/* Window Title Bar */
+.window-titlebar {
+    height: 32px;
+    background: linear-gradient(180deg,
+        rgba(0, 255, 127, 0.9) 0%,
+        rgba(50, 205, 50, 0.9) 30%,
+        rgba(34, 139, 34, 0.9) 60%,
+        rgba(0, 128, 0, 0.9) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    position: relative;
+    border-radius: 12px 12px 0 0;
+}
+
+.window-titlebar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.4) 0%,
+        rgba(255, 255, 255, 0.1) 100%);
+    pointer-events: none;
+    border-radius: 12px 12px 0 0;
+}
+
+.titlebar-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+}
+
+.app-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.window-controls {
+    display: flex;
+    gap: 2px;
+    z-index: 1;
+}
+
+.window-btn {
+    width: 46px;
+    height: 20px;
+    border: none;
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(255, 255, 255, 0.1) 100%);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    position: relative;
+    color: white;
+    font-size: 16px;
+    border-radius: 3px;
+}
+
+.window-btn:hover {
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.4) 0%,
+        rgba(255, 255, 255, 0.2) 100%);
+}
+
+.window-btn span {
+    font-weight: 400;
+}
+
+.minimize-btn span {
+    width: 10px;
+    height: 1px;
+    background: white;
+    display: block;
+}
+
+.maximize-btn span {
+    width: 10px;
+    height: 10px;
+    border: 1px solid white;
+    display: block;
+}
+
+.close-btn {
+    background: linear-gradient(180deg,
+        rgba(232, 17, 35, 0.9) 0%,
+        rgba(200, 0, 20, 0.9) 100%);
+}
+
+.close-btn:hover {
+    background: linear-gradient(180deg,
+        rgba(241, 112, 122, 0.9) 0%,
+        rgba(232, 17, 35, 0.9) 100%);
+}
+
+/* Navigation Bar */
+.aero-navbar {
+    height: 48px;
+    background: linear-gradient(to bottom,
+        #525252 0%,
+        #3d3d3d 50%,
+        #292929 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.nav-section {
+    display: flex;
+    gap: 5px;
+}
+
+.nav-btn {
+    padding: 8px 16px;
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        transparent 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav-btn:hover {
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(255, 255, 255, 0.05) 100%);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.nav-btn.active {
+    background: linear-gradient(135deg,
+        var(--aero-green-vivid) 0%,
+        var(--aero-green-medium) 50%,
+        var(--aero-green-dark) 100%);
+    color: white;
+    border-color: var(--aero-green-dark);
+    box-shadow: 0 2px 10px rgba(0, 255, 0, 0.3);
+}
+
+.nav-icon {
+    font-size: 16px;
+}
+
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-name {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 13px;
+}
+
+.logout-btn {
+    padding: 6px 12px;
+    background: linear-gradient(135deg,
+        rgba(232, 17, 35, 0.8) 0%,
+        rgba(200, 0, 20, 0.8) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    color: white;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.logout-btn:hover {
+    background: linear-gradient(135deg,
+        rgba(241, 112, 122, 0.9) 0%,
+        rgba(232, 17, 35, 0.9) 100%);
+    transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   Content Area
+   ========================================================================== */
+
+.window-content {
+    flex: 1;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.content-wrapper {
+    display: flex;
+    height: 100%;
+}
+
+/* Sidebar */
+.aero-sidebar {
+    width: 280px;
+    flex-shrink: 0; /* Prevent sidebar from shrinking */
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 100%);
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.sidebar-section {
+    margin-bottom: 25px;
+}
+
+.section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--aero-green-bright);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+/* Voice Options */
+.voice-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.voice-option {
+    display: block;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.voice-option::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        transparent 100%);
+    transition: left 0.5s;
+}
+
+.voice-option:hover::before {
+    left: 100%;
+}
+
+.voice-option input[type="radio"] {
+    display: none;
+}
+
+.voice-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    position: relative;
+    z-index: 1;
+}
+
+.voice-icon {
+    font-size: 20px;
+}
+
+.voice-name {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.voice-desc {
+    font-size: 11px;
+    opacity: 0.8;
+    margin-left: auto;
+}
+
+/* Individual Voice Gradients */
+.alloy-gradient {
+    background: linear-gradient(135deg,
+        var(--voice-alloy-from) 0%,
+        var(--voice-alloy-to) 100%);
+}
+
+.echo-gradient {
+    background: linear-gradient(135deg,
+        var(--voice-echo-from) 0%,
+        var(--voice-echo-to) 100%);
+}
+
+.fable-gradient {
+    background: linear-gradient(135deg,
+        var(--voice-fable-from) 0%,
+        var(--voice-fable-to) 100%);
+}
+
+.nova-gradient {
+    background: linear-gradient(135deg,
+        var(--voice-nova-from) 0%,
+        var(--voice-nova-to) 100%);
+}
+
+.onyx-gradient {
+    background: linear-gradient(135deg,
+        var(--voice-onyx-from) 0%,
+        var(--voice-onyx-to) 100%);
+}
+
+.shimmer-gradient {
+    background: linear-gradient(135deg,
+        var(--voice-shimmer-from) 0%,
+        var(--voice-shimmer-to) 100%);
+}
+
+.voice-option input[type="radio"]:checked + .voice-label {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+.voice-option input[type="radio"]:checked + .voice-label::after {
+    content: '✓';
+    position: absolute;
+    right: 10px;
+    font-size: 18px;
+    color: var(--aero-green-bright);
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+}
+
+/* Speed Control */
+.speed-control {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.speed-control input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 6px;
+    background: linear-gradient(90deg,
+        var(--aero-green-dark) 0%,
+        var(--aero-green-medium) 50%,
+        var(--aero-green-bright) 100%);
+    border-radius: 3px;
+    outline: none;
+}
+
+.speed-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: radial-gradient(circle,
+        white 0%,
+        var(--aero-green-light) 60%,
+        var(--aero-green-bright) 100%);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+    transition: all 0.3s;
+}
+
+.speed-control input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 30px rgba(0, 255, 0, 1);
+}
+
+.speed-display {
+    min-width: 50px;
+    text-align: center;
+    color: var(--aero-green-bright);
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+/* AI Toggles */
+.ai-toggles {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.aero-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.aero-toggle input[type="checkbox"] {
+    display: none;
+}
+
+.toggle-slider {
+    width: 48px;
+    height: 24px;
+    background: linear-gradient(135deg,
+        rgba(100, 100, 100, 0.6) 0%,
+        rgba(60, 60, 60, 0.6) 100%);
+    border-radius: 12px;
+    position: relative;
+    transition: all 0.3s;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.toggle-slider::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    background: radial-gradient(circle,
+        white 0%,
+        #e0e0e0 100%);
+    border-radius: 50%;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.aero-toggle input[type="checkbox"]:checked + .toggle-slider {
+    background: linear-gradient(135deg,
+        var(--aero-green-medium) 0%,
+        var(--aero-green-dark) 100%);
+    box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(0, 255, 0, 0.5);
+}
+
+.aero-toggle input[type="checkbox"]:checked + .toggle-slider::after {
+    left: 27px;
+    background: radial-gradient(circle,
+        white 0%,
+        var(--aero-green-light) 100%);
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(0, 255, 0, 0.8);
+}
+
+.toggle-label {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 13px;
+}
+
+/* ==========================================================================
+   Main Panel
+   ========================================================================== */
+
+.main-panel {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    min-width: 0; /* Allows flex item to shrink below content size */
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.glass-panel {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        transparent 100%);
+}
+
+.panel-title {
+    font-size: 24px;
+    font-weight: 300;
+    color: var(--aero-green-bright);
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    letter-spacing: 1px;
+}
+
+/* Back to sidebar button - hidden on desktop */
+.back-to-sidebar {
+    display: none;
+}
+
+.panel-subtitle {
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--aero-green-light);
+    margin-bottom: 15px;
+}
+
+/* Form Elements */
+.form-section {
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-group {
+    flex: 1;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.aero-input {
+    width: 100%;
+    padding: 10px 15px;
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    color: white;
+    font-size: 14px;
+    transition: all 0.3s;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.aero-input:focus {
+    outline: none;
+    border-color: var(--aero-green-bright);
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.08) 100%);
+    box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.1),
+        0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+.aero-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.aero-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    resize: vertical;
+    transition: all 0.3s;
+}
+
+.aero-textarea:focus {
+    outline: none;
+    border-color: var(--aero-green-bright);
+    box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.1),
+        0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+.textarea-wrapper {
+    position: relative;
+}
+
+.char-counter {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 11px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* File Upload */
+.file-upload-section {
+    margin-top: 15px;
+}
+
+.file-upload-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 100%);
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.file-upload-label:hover {
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.08) 100%);
+    border-color: var(--aero-green-bright);
+    transform: translateY(-2px);
+}
+
+.upload-icon {
+    font-size: 24px;
+}
+
+.upload-text {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+}
+
+.file-info {
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(0, 255, 0, 0.1);
+    border-radius: 6px;
+    color: var(--aero-green-bright);
+    font-size: 13px;
+    display: none;
+}
+
+.file-info.active {
+    display: block;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.aero-btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.aero-btn.primary {
+    background: linear-gradient(135deg,
+        var(--aero-green-bright) 0%,
+        var(--aero-green-medium) 20%,
+        var(--aero-green-light) 40%,
+        var(--aero-green-medium) 60%,
+        var(--aero-green-bright) 80%,
+        var(--aero-green-dark) 100%);
+    color: white;
+    box-shadow:
+        0 4px 20px rgba(0, 255, 0, 0.4),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+.aero-btn.primary:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow:
+        0 6px 30px rgba(0, 255, 0, 0.6),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+.aero-btn.secondary {
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(255, 255, 255, 0.1) 100%);
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.aero-btn.secondary:hover {
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(255, 255, 255, 0.15) 100%);
+    transform: translateY(-2px);
+}
+
+/* Shimmer Effect for Primary Button */
+.shimmer-effect::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.4) 50%,
+        transparent 100%);
+    animation: shimmer 2s infinite;
+}
+
+.btn-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle,
+        rgba(0, 255, 0, 0.3) 0%,
+        transparent 70%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.aero-btn:hover .btn-glow {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   Player Bar (Windows Media Player Style)
+   ========================================================================== */
+
+.player-bar {
+    height: 65px;
+    background: linear-gradient(135deg,
+        rgba(42, 42, 42, 0.98) 0%,
+        rgba(31, 47, 31, 0.98) 50%,
+        rgba(21, 21, 21, 0.98) 100%);
+    border-top: 1px solid rgba(0, 255, 0, 0.3);
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    gap: 20px;
+    position: relative;
+}
+
+.player-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg,
+        var(--aero-green-bright) 0%,
+        var(--aero-green-medium) 50%,
+        var(--aero-green-bright) 100%);
+    animation: scanline 4s linear infinite;
+}
+
+/* Player Controls */
+.player-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.player-btn {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.player-btn:hover {
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(255, 255, 255, 0.1) 100%);
+    transform: scale(1.1);
+}
+
+.player-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.play-btn {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg,
+        var(--aero-green-bright) 0%,
+        var(--aero-green-dark) 100%);
+    border: none;
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+}
+
+.play-btn:hover {
+    box-shadow: 0 0 40px rgba(0, 255, 0, 0.8);
+    animation: pulse 1s infinite;
+}
+
+/* Player Info */
+.player-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.track-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.track-name {
+    color: white;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.track-artist {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 11px;
+}
+
+/* Progress Bar */
+.progress-bar-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.time-display {
+    color: var(--aero-green-bright);
+    font-size: 10px;
+    min-width: 35px;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+}
+
+.progress-bar {
+    flex: 1;
+    height: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg,
+        var(--aero-green-bright) 0%,
+        var(--aero-green-medium) 25%,
+        var(--aero-green-light) 50%,
+        var(--aero-green-pale) 75%,
+        #ccffcc 100%);
+    border-radius: 4px;
+    position: relative;
+    transition: width 0.3s;
+}
+
+.progress-handle {
+    position: absolute;
+    top: 50%;
+    right: -9px;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    background: radial-gradient(circle,
+        white 0%,
+        var(--aero-green-light) 60%,
+        var(--aero-green-bright) 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+    cursor: grab;
+    transition: all 0.3s;
+}
+
+.progress-handle:hover {
+    transform: translateY(-50%) scale(1.2);
+    box-shadow: 0 0 30px rgba(0, 255, 0, 1);
+}
+
+.progress-handle:active {
+    cursor: grabbing;
+}
+
+/* Player Extras */
+.player-extras {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.volume-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    transition: all 0.3s;
+}
+
+.volume-btn:hover {
+    transform: scale(1.1);
+}
+
+.volume-slider-container {
+    width: 100px;
+    position: relative;
+}
+
+.volume-slider {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    background: var(--aero-green-bright);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+}
+
+.volume-fill {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    background: linear-gradient(90deg,
+        var(--aero-green-bright) 0%,
+        var(--aero-green-medium) 100%);
+    border-radius: 2px;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   Loading Overlay
+   ========================================================================== */
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loading-spinner {
+    text-align: center;
+}
+
+.spinner-ring {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    border: 4px solid transparent;
+    border-top-color: var(--aero-green-bright);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+.spinner-text {
+    color: var(--aero-green-bright);
+    font-size: 16px;
+    text-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+}
+
+/* ==========================================================================
+   Additional UI Elements
+   ========================================================================== */
+
+/* Audio Grid */
+.audio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.audio-card {
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 15px;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.audio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 255, 0, 0.3);
+    border-color: var(--aero-green-bright);
+}
+
+/* Select Elements */
+.aero-select {
+    padding: 10px 15px;
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.aero-select option {
+    background: var(--aero-glass-dark);
+    color: white;
+}
+
+/* Search Input */
+.search-input {
+    flex: 1;
+}
+
+.library-filters {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+/* Analysis Panel */
+.analysis-panel {
+    margin-top: 20px;
+}
+
+.analysis-content {
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+
+@media (max-width: 1200px) {
+    .aero-window {
+        max-width: 95%;
+        min-width: 900px;
+    }
+}
+
+/* Medium screens - reduce sidebar width */
+@media (max-width: 1100px) {
+    .aero-sidebar {
+        width: 240px;
+    }
+}
+
+@media (max-width: 1024px) {
+    body {
+        padding: 0;
+        overflow: hidden; /* Hide orbs that extend past edges */
+    }
+
+    .aero-window {
+        width: 100%;
+        min-width: 600px;
+        border-radius: 0;
+        box-shadow:
+            0 10px 60px rgba(0, 0, 0, 0.5),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Hide background orbs in responsive mode to prevent green edge glow */
+    .orb,
+    .aurora-effect {
+        display: none;
+    }
+
+    .content-wrapper {
+        position: relative;
+    }
+
+    /* Hide sidebar when main panel is active on medium screens */
+    .content-wrapper.show-main .aero-sidebar {
+        display: none;
+    }
+
+    /* Show main panel full width when active */
+    .content-wrapper.show-main .main-panel {
+        width: 100%;
+    }
+
+    /* Hide main panel by default on medium screens, show sidebar */
+    .main-panel {
+        display: none;
+        padding: 15px;
+    }
+
+    .content-wrapper.show-main .main-panel {
+        display: block;
+    }
+
+    .aero-sidebar {
+        width: 100%;
+        padding: 15px;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .voice-option {
+        padding: 10px;
+    }
+
+    .window-titlebar {
+        border-radius: 0;
+    }
+
+    /* Add back button to main panel */
+    .back-to-sidebar {
+        display: inline-flex !important;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: linear-gradient(135deg,
+            rgba(127, 255, 0, 0.2) 0%,
+            rgba(0, 255, 0, 0.2) 100%);
+        border: 1px solid rgba(0, 255, 0, 0.3);
+        border-radius: 6px;
+        color: var(--aero-green-bright);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-bottom: 15px;
+        transition: all 0.3s;
+    }
+
+    .back-to-sidebar:hover {
+        background: linear-gradient(135deg,
+            rgba(127, 255, 0, 0.3) 0%,
+            rgba(0, 255, 0, 0.3) 100%);
+        transform: translateX(-3px);
+    }
+
+    /* Make player bar even more compact in responsive mode */
+    .player-bar {
+        height: 50px;
+        padding: 0 10px;
+        gap: 12px;
+    }
+
+    .player-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .play-btn {
+        width: 38px;
+        height: 38px;
+    }
+
+    .player-info {
+        gap: 3px;
+    }
+
+    .track-name {
+        font-size: 12px;
+    }
+
+    .track-artist {
+        font-size: 10px;
+    }
+
+    .time-display {
+        font-size: 9px;
+        min-width: 30px;
+    }
+
+    .progress-bar-wrapper {
+        gap: 6px;
+    }
+
+    .progress-bar {
+        height: 6px;
+    }
+
+    .player-extras {
+        gap: 8px;
+    }
+
+    .volume-slider-container {
+        width: 70px;
+    }
+
+    .progress-handle {
+        width: 14px;
+        height: 14px;
+        right: -7px;
+    }
+}
+
+@media (max-width: 768px) {
+    .aero-window {
+        min-width: 100%;
+    }
+
+    .content-wrapper {
+        flex-direction: column;
+    }
+
+    .aero-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .player-bar {
+        flex-direction: column;
+        height: auto;
+        padding: 15px;
+    }
+}
+
+/* ==========================================================================
+   Scrollbar Styling
+   ========================================================================== */
+
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg,
+        var(--aero-green-bright) 0%,
+        var(--aero-green-dark) 100%);
+    border-radius: 6px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg,
+        var(--aero-green-light) 0%,
+        var(--aero-green-medium) 100%);
+}
+
+/* ==========================================================================
+   Accessibility
+   ========================================================================== */
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Focus States */
+*:focus-visible {
+    outline: 2px solid var(--aero-green-bright);
+    outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+    .aero-window {
+        box-shadow: none;
+        backdrop-filter: none;
+    }
+
+    .player-bar,
+    .window-controls {
+        display: none;
+    }
+}

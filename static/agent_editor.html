@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Editor - VoiceVerse</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reactflow@11.10.4/dist/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/reactflow@11.10.4/dist/umd/index.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #131729;
+            --bg-card: #1a1f3a;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --green: #10b981;
+            --border: #2d3448;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow: hidden;
+        }
+
+        .agent-editor-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: var(--green);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .node-palette {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .node-item {
+            background: var(--bg-secondary);
+            padding: 0.875rem;
+            border-radius: 8px;
+            cursor: grab;
+            transition: all 0.3s;
+            border: 1px solid var(--border);
+        }
+
+        .node-item:hover {
+            background: var(--bg-primary);
+            border-color: var(--accent);
+            transform: translateX(4px);
+        }
+
+        .node-item-header {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            margin-bottom: 0.375rem;
+        }
+
+        .node-icon {
+            font-size: 1.25rem;
+        }
+
+        .node-label {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .node-description {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-left: 2rem;
+        }
+
+        .canvas {
+            flex: 1;
+            background: var(--bg-primary);
+            position: relative;
+        }
+
+        .react-flow {
+            background: var(--bg-primary);
+        }
+
+        .react-flow__node {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 12px;
+            min-width: 180px;
+            color: var(--text-primary);
+        }
+
+        .react-flow__handle {
+            background: var(--green);
+            width: 10px;
+            height: 10px;
+        }
+
+        .react-flow__edge-path {
+            stroke: var(--accent);
+            stroke-width: 2px;
+        }
+
+        .react-flow__controls {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+
+        .react-flow__controls-button {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        .react-flow__controls-button:hover {
+            background: var(--bg-primary);
+        }
+
+        .properties-panel {
+            width: 320px;
+            background: var(--bg-card);
+            border-left: 1px solid var(--border);
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .workflow-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .workflow-item {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .workflow-item:hover {
+            background: var(--bg-primary);
+            border-color: var(--accent);
+            transform: translateX(4px);
+        }
+
+        .workflow-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .workflow-meta {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .test-panel {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-top: 1rem;
+        }
+
+        .test-result {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8125rem;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useCallback, useEffect, useRef } = React;
+        const { ReactFlow, Controls, Background, addEdge, useNodesState, useEdgesState, Handle, Position, MarkerType } = ReactFlowRenderer;
+
+        // Custom Node Component
+        function AgentNode({ data }) {
+            return (
+                <div style={{
+                    background: data.color,
+                    padding: '12px',
+                    borderRadius: '8px',
+                    minWidth: '180px',
+                    border: '2px solid rgba(255,255,255,0.1)'
+                }}>
+                    <Handle type="target" position={Position.Left} style={{ background: '#10b981' }} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                        <span style={{ fontSize: '1.2rem' }}>{data.icon}</span>
+                        <strong style={{ fontSize: '0.9rem' }}>{data.label}</strong>
+                    </div>
+                    <div style={{ fontSize: '0.75rem', opacity: 0.8 }}>{data.description}</div>
+                    <Handle type="source" position={Position.Right} style={{ background: '#10b981' }} />
+                </div>
+            );
+        }
+
+        const nodeTypes = {
+            agentNode: AgentNode
+        };
+
+        function AgentEditor() {
+            const [nodes, setNodes, onNodesChange] = useNodesState([]);
+            const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+            const [nodeTypesData, setNodeTypesData] = useState({});
+            const [workflows, setWorkflows] = useState([]);
+            const [currentWorkflow, setCurrentWorkflow] = useState(null);
+            const [showSaveModal, setShowSaveModal] = useState(false);
+            const [showLoadModal, setShowLoadModal] = useState(false);
+            const [showTestPanel, setShowTestPanel] = useState(false);
+            const [workflowName, setWorkflowName] = useState('');
+            const [workflowDescription, setWorkflowDescription] = useState('');
+            const [testInput, setTestInput] = useState('');
+            const [testResult, setTestResult] = useState(null);
+            const [isExecuting, setIsExecuting] = useState(false);
+
+            const reactFlowWrapper = useRef(null);
+            const [reactFlowInstance, setReactFlowInstance] = useState(null);
+
+            // Load node types on mount
+            useEffect(() => {
+                fetch('/api/workflow/node-types')
+                    .then(res => res.json())
+                    .then(data => setNodeTypesData(data.node_types))
+                    .catch(err => console.error('Failed to load node types:', err));
+
+                loadWorkflows();
+            }, []);
+
+            const loadWorkflows = () => {
+                fetch('/api/workflow/workflows')
+                    .then(res => res.json())
+                    .then(data => setWorkflows(data.workflows || []))
+                    .catch(err => console.error('Failed to load workflows:', err));
+            };
+
+            const onConnect = useCallback((params) => {
+                setEdges((eds) => addEdge({
+                    ...params,
+                    type: 'smoothstep',
+                    animated: true,
+                    markerEnd: { type: MarkerType.ArrowClosed }
+                }, eds));
+            }, [setEdges]);
+
+            const onDragOver = useCallback((event) => {
+                event.preventDefault();
+                event.dataTransfer.dropEffect = 'move';
+            }, []);
+
+            const onDrop = useCallback(
+                (event) => {
+                    event.preventDefault();
+
+                    const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+                    const type = event.dataTransfer.getData('application/reactflow');
+
+                    if (!type || !nodeTypesData[type]) {
+                        return;
+                    }
+
+                    const position = reactFlowInstance.project({
+                        x: event.clientX - reactFlowBounds.left,
+                        y: event.clientY - reactFlowBounds.top,
+                    });
+
+                    const nodeType = nodeTypesData[type];
+                    const newNode = {
+                        id: `${type}_${Date.now()}`,
+                        type: 'agentNode',
+                        position,
+                        data: {
+                            label: nodeType.label,
+                            description: nodeType.description,
+                            icon: nodeType.icon,
+                            color: nodeType.color,
+                            nodeType: type
+                        },
+                    };
+
+                    setNodes((nds) => nds.concat(newNode));
+                },
+                [reactFlowInstance, nodeTypesData, setNodes]
+            );
+
+            const onDragStart = (event, nodeType) => {
+                event.dataTransfer.setData('application/reactflow', nodeType);
+                event.dataTransfer.effectAllowed = 'move';
+            };
+
+            const saveWorkflow = async () => {
+                if (!workflowName.trim()) {
+                    alert('Please enter a workflow name');
+                    return;
+                }
+
+                const workflow = {
+                    name: workflowName,
+                    description: workflowDescription,
+                    nodes: nodes.map(n => ({
+                        id: n.id,
+                        type: n.data.nodeType,
+                        position: n.position,
+                        data: n.data
+                    })),
+                    edges: edges.map(e => ({
+                        id: e.id,
+                        source: e.source,
+                        target: e.target
+                    }))
+                };
+
+                try {
+                    const url = currentWorkflow
+                        ? `/api/workflow/workflows/${currentWorkflow.id}`
+                        : '/api/workflow/workflows';
+
+                    const method = currentWorkflow ? 'PUT' : 'POST';
+
+                    const response = await fetch(url, {
+                        method,
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(workflow)
+                    });
+
+                    if (response.ok) {
+                        alert('Workflow saved successfully!');
+                        setShowSaveModal(false);
+                        loadWorkflows();
+                    } else {
+                        const error = await response.json();
+                        alert(`Failed to save: ${error.error}`);
+                    }
+                } catch (err) {
+                    alert('Failed to save workflow');
+                    console.error(err);
+                }
+            };
+
+            const loadWorkflow = (workflow) => {
+                setCurrentWorkflow(workflow);
+                setWorkflowName(workflow.name);
+                setWorkflowDescription(workflow.description || '');
+
+                const loadedNodes = workflow.nodes.map(n => ({
+                    id: n.id,
+                    type: 'agentNode',
+                    position: n.position,
+                    data: n.data
+                }));
+
+                const loadedEdges = workflow.edges.map(e => ({
+                    id: e.id,
+                    source: e.source,
+                    target: e.target,
+                    type: 'smoothstep',
+                    animated: true,
+                    markerEnd: { type: MarkerType.ArrowClosed }
+                }));
+
+                setNodes(loadedNodes);
+                setEdges(loadedEdges);
+                setShowLoadModal(false);
+            };
+
+            const executeWorkflow = async () => {
+                if (!currentWorkflow) {
+                    alert('Please save the workflow first');
+                    return;
+                }
+
+                setIsExecuting(true);
+                setTestResult(null);
+
+                try {
+                    const response = await fetch(`/api/workflow/workflows/${currentWorkflow.id}/execute`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            inputs: { text: testInput }
+                        })
+                    });
+
+                    const result = await response.json();
+                    setTestResult(result);
+                } catch (err) {
+                    setTestResult({ error: err.message });
+                } finally {
+                    setIsExecuting(false);
+                }
+            };
+
+            const newWorkflow = () => {
+                setNodes([]);
+                setEdges([]);
+                setCurrentWorkflow(null);
+                setWorkflowName('');
+                setWorkflowDescription('');
+            };
+
+            return (
+                <div className="agent-editor-container">
+                    <div className="header">
+                        <h1>🤖 AI Agent Editor</h1>
+                        <div className="header-actions">
+                            <button className="btn btn-secondary" onClick={newWorkflow}>New Workflow</button>
+                            <button className="btn btn-secondary" onClick={() => setShowLoadModal(true)}>Load</button>
+                            <button className="btn btn-primary" onClick={() => setShowSaveModal(true)}>Save Workflow</button>
+                            <button className="btn btn-secondary" onClick={() => setShowTestPanel(!showTestPanel)}>
+                                {showTestPanel ? 'Hide Test' : 'Test Workflow'}
+                            </button>
+                            <button className="btn btn-danger" onClick={() => window.location.href = '/settings'}>Exit</button>
+                        </div>
+                    </div>
+
+                    <div className="main-content">
+                        <div className="sidebar">
+                            <h3>Agent Nodes</h3>
+                            <div className="node-palette">
+                                {Object.entries(nodeTypesData).map(([key, nodeType]) => (
+                                    <div
+                                        key={key}
+                                        className="node-item"
+                                        draggable
+                                        onDragStart={(e) => onDragStart(e, key)}
+                                    >
+                                        <div className="node-item-header">
+                                            <span className="node-icon">{nodeType.icon}</span>
+                                            <span className="node-label">{nodeType.label}</span>
+                                        </div>
+                                        <div className="node-description">{nodeType.description}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="canvas" ref={reactFlowWrapper}>
+                            <ReactFlow
+                                nodes={nodes}
+                                edges={edges}
+                                onNodesChange={onNodesChange}
+                                onEdgesChange={onEdgesChange}
+                                onConnect={onConnect}
+                                onInit={setReactFlowInstance}
+                                onDrop={onDrop}
+                                onDragOver={onDragOver}
+                                nodeTypes={nodeTypes}
+                                fitView
+                            >
+                                <Controls />
+                                <Background color="#2d3448" gap={16} />
+                            </ReactFlow>
+                        </div>
+
+                        {showTestPanel && (
+                            <div className="properties-panel">
+                                <div className="test-panel">
+                                    <h3>Test Workflow</h3>
+                                    <div className="form-group">
+                                        <label>Input Text</label>
+                                        <textarea
+                                            value={testInput}
+                                            onChange={(e) => setTestInput(e.target.value)}
+                                            placeholder="Enter test input..."
+                                        />
+                                    </div>
+                                    <button
+                                        className="btn btn-primary"
+                                        onClick={executeWorkflow}
+                                        disabled={isExecuting}
+                                        style={{ width: '100%' }}
+                                    >
+                                        {isExecuting ? <><span className="loading"></span> Executing...</> : 'Execute'}
+                                    </button>
+                                    {testResult && (
+                                        <div className="test-result">
+                                            <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
+                                                {JSON.stringify(testResult, null, 2)}
+                                            </pre>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {showSaveModal && (
+                        <div className="modal" onClick={() => setShowSaveModal(false)}>
+                            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                <h2>Save Workflow</h2>
+                                <div className="form-group">
+                                    <label>Workflow Name</label>
+                                    <input
+                                        type="text"
+                                        value={workflowName}
+                                        onChange={(e) => setWorkflowName(e.target.value)}
+                                        placeholder="My Agent Workflow"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Description</label>
+                                    <textarea
+                                        value={workflowDescription}
+                                        onChange={(e) => setWorkflowDescription(e.target.value)}
+                                        placeholder="What does this workflow do?"
+                                    />
+                                </div>
+                                <div className="modal-actions">
+                                    <button className="btn btn-secondary" onClick={() => setShowSaveModal(false)}>Cancel</button>
+                                    <button className="btn btn-primary" onClick={saveWorkflow}>Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {showLoadModal && (
+                        <div className="modal" onClick={() => setShowLoadModal(false)}>
+                            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                <h2>Load Workflow</h2>
+                                <div className="workflow-list">
+                                    {workflows.length === 0 ? (
+                                        <p style={{ color: '#94a3b8' }}>No saved workflows</p>
+                                    ) : (
+                                        workflows.map(wf => (
+                                            <div
+                                                key={wf.id}
+                                                className="workflow-item"
+                                                onClick={() => loadWorkflow(wf)}
+                                            >
+                                                <div className="workflow-name">{wf.name}</div>
+                                                <div className="workflow-meta">
+                                                    {wf.description || 'No description'} • {new Date(wf.created_at).toLocaleDateString()}
+                                                </div>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                                <div className="modal-actions">
+                                    <button className="btn btn-secondary" onClick={() => setShowLoadModal(false)}>Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // Render the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<AgentEditor />);
+    </script>
+</body>
+</html>

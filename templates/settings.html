@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - VoiceVerse</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #131729;
+            --bg-card: #1a1f3a;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --green: #10b981;
+            --border: #2d3448;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .back-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: var(--bg-secondary);
+            border-color: var(--accent);
+        }
+
+        .section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .profile-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-value {
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .admin-tools {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tool-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 12px 24px rgba(99, 102, 241, 0.2);
+        }
+
+        .tool-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .tool-description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚙️ Settings</h1>
+            <a href="/" class="back-btn">
+                ← Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="section">
+            <h2 class="section-title">Profile Information</h2>
+            <div class="profile-info">
+                <div class="info-card">
+                    <div class="info-label">Username</div>
+                    <div class="info-value">{{ username }}</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Account Type</div>
+                    <div class="info-value">
+                        {% if is_admin %}
+                            <span class="admin-badge">👑 Admin</span>
+                        {% else %}
+                            User
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Member Since</div>
+                    <div class="info-value">{{ user.created_at[:10] if user.created_at else 'N/A' }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Usage Stats -->
+        <div class="section">
+            <h2 class="section-title">Usage Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">{{ total_files }}</div>
+                    <div class="stat-label">Total Audio Files</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{{ "{:,}".format(total_characters) }}</div>
+                    <div class="stat-label">Characters Processed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${{ "%.2f"|format(total_cost) }}</div>
+                    <div class="stat-label">Total Cost</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Tools (Only visible to admins) -->
+        {% if is_admin %}
+        <div class="section">
+            <h2 class="section-title">🛠️ Admin Tools</h2>
+            <div class="admin-tools">
+                <a href="/ai-agents" class="tool-card">
+                    <div class="tool-icon">🤖</div>
+                    <div class="tool-title">AI Agent Editor</div>
+                    <div class="tool-description">
+                        Build visual AI agent workflows with drag-and-drop. Connect your TTS agents, code reviewers, and custom AI agents.
+                    </div>
+                </a>
+                <a href="/workflow-editor" class="tool-card">
+                    <div class="tool-icon">⚡</div>
+                    <div class="tool-title">Workflow Editor</div>
+                    <div class="tool-description">
+                        Create and manage automated workflows for your TTS application.
+                    </div>
+                </a>
+                <a href="/analytics" class="tool-card">
+                    <div class="tool-icon">📊</div>
+                    <div class="tool-title">Analytics Dashboard</div>
+                    <div class="tool-description">
+                        View detailed metrics, usage patterns, and performance analytics.
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+Flask>=2.3.0
+openai>=1.0.0
+Werkzeug>=2.3.0
+PyPDF2>=3.0.0
+python-docx>=0.8.11
+python-dotenv>=1.0.0
+Flask-WTF>=1.2.0
+Flask-Limiter>=4.0.0
+cryptography>=41.0.0

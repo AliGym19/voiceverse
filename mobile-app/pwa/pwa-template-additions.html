@@ -1,0 +1,293 @@
+<!--
+  PWA Template Additions
+  Add these snippets to your existing Flask templates
+
+  LOCATION: Add to the <head> section of your base template or index.html
+-->
+
+<!-- ==================== PWA META TAGS ==================== -->
+
+<!-- Basic PWA Configuration -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="VoiceVerse">
+<meta name="application-name" content="VoiceVerse">
+<meta name="theme-color" content="#1DB954">
+<meta name="msapplication-TileColor" content="#1DB954">
+<meta name="msapplication-navbutton-color" content="#1DB954">
+
+<!-- Viewport with safe areas for notch support -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="/manifest.json">
+
+<!-- iOS Icons (required for Add to Home Screen) -->
+<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/static/icons/icon-152x152.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/static/icons/icon-144x144.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/static/icons/icon-120x120.png">
+
+<!-- Standard Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
+
+<!-- iOS Splash Screens (optional but recommended) -->
+<link rel="apple-touch-startup-image" href="/static/splash/iphone5_splash.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
+<link rel="apple-touch-startup-image" href="/static/splash/iphone6_splash.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
+<link rel="apple-touch-startup-image" href="/static/splash/iphoneplus_splash.png" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)">
+<link rel="apple-touch-startup-image" href="/static/splash/iphonex_splash.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+<link rel="apple-touch-startup-image" href="/static/splash/iphonexr_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
+<link rel="apple-touch-startup-image" href="/static/splash/iphonexsmax_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
+<link rel="apple-touch-startup-image" href="/static/splash/ipad_splash.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)">
+<link rel="apple-touch-startup-image" href="/static/splash/ipadpro1_splash.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)">
+<link rel="apple-touch-startup-image" href="/static/splash/ipadpro3_splash.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)">
+<link rel="apple-touch-startup-image" href="/static/splash/ipadpro2_splash.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
+
+<!-- Microsoft Tiles -->
+<meta name="msapplication-TileImage" content="/static/icons/icon-144x144.png">
+
+<!-- ==================== PWA STYLES ==================== -->
+
+<!-- Include mobile-responsive styles -->
+<link rel="stylesheet" href="/static/css/mobile-styles.css">
+
+<!-- Inline critical CSS for instant load -->
+<style>
+  /* Prevent FOUC (Flash of Unstyled Content) */
+  body {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  body.loaded {
+    opacity: 1;
+  }
+
+  /* Loading spinner for PWA */
+  .pwa-loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+  }
+
+  .pwa-loading.show {
+    display: block;
+  }
+
+  .pwa-loading-spinner {
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #1DB954;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>
+
+<!-- ==================== PWA SCRIPTS ==================== -->
+
+<!-- Add before closing </body> tag -->
+
+<!-- Loading state management -->
+<script>
+  // Remove loading state when page is ready
+  window.addEventListener('load', () => {
+    document.body.classList.add('loaded');
+  });
+
+  // Show loading spinner for PWA navigation
+  if (window.matchMedia('(display-mode: standalone)').matches) {
+    document.addEventListener('DOMContentLoaded', () => {
+      // Add loading indicator
+      const loading = document.createElement('div');
+      loading.className = 'pwa-loading';
+      loading.innerHTML = '<div class="pwa-loading-spinner"></div>';
+      document.body.appendChild(loading);
+    });
+  }
+</script>
+
+<!-- PWA Install Prompt -->
+<script src="/static/js/install-prompt.js" defer></script>
+
+<!-- Service Worker Registration -->
+<script>
+  // This is already in install-prompt.js, but shown here for reference
+  // The service worker is automatically registered when install-prompt.js loads
+</script>
+
+<!-- Share API Integration (if supported) -->
+<script>
+  // Add share button functionality
+  function shareContent(title, text, url) {
+    if (navigator.share) {
+      navigator.share({
+        title: title,
+        text: text,
+        url: url
+      })
+      .then(() => console.log('Successful share'))
+      .catch((error) => console.log('Error sharing', error));
+    } else {
+      // Fallback: copy to clipboard
+      navigator.clipboard.writeText(url).then(() => {
+        alert('Link copied to clipboard!');
+      });
+    }
+  }
+
+  // Example usage: Add to your share buttons
+  // <button onclick="shareContent('VoiceVerse', 'Check out this TTS app', window.location.href)">Share</button>
+</script>
+
+<!-- Pre-fill text from share target -->
+<script>
+  // Check if text was shared to the app
+  const urlParams = new URLSearchParams(window.location.search);
+  const sharedText = urlParams.get('text');
+
+  if (sharedText) {
+    // Pre-fill the TTS textarea
+    const textarea = document.querySelector('#tts-text, textarea[name="text"]');
+    if (textarea) {
+      textarea.value = decodeURIComponent(sharedText);
+    }
+  }
+</script>
+
+<!-- Prevent pull-to-refresh (optional, for better PWA feel) -->
+<style>
+  body {
+    overscroll-behavior-y: contain;
+  }
+</style>
+
+<!-- Handle offline/online status -->
+<script>
+  let wasOffline = false;
+
+  window.addEventListener('offline', () => {
+    wasOffline = true;
+    // Show offline indicator
+    const indicator = document.createElement('div');
+    indicator.id = 'offline-indicator';
+    indicator.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: #ffaa00;
+      color: #000;
+      text-align: center;
+      padding: 8px;
+      font-weight: 600;
+      z-index: 9999;
+    `;
+    indicator.textContent = '⚠️ You are offline';
+    document.body.appendChild(indicator);
+  });
+
+  window.addEventListener('online', () => {
+    if (wasOffline) {
+      // Remove offline indicator
+      const indicator = document.getElementById('offline-indicator');
+      if (indicator) {
+        indicator.remove();
+      }
+
+      // Show online notification
+      if (window.pwaInstaller) {
+        window.pwaInstaller.showToast('Back online!', 'success');
+      }
+
+      wasOffline = false;
+    }
+  });
+</script>
+
+<!-- ==================== EXAMPLE USAGE IN YOUR TEMPLATE ==================== -->
+
+<!--
+Full example of how your template might look:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Standard viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+
+    <title>VoiceVerse - AI Text to Speech</title>
+
+    <!-- PWA Meta Tags (copy from above) -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- ... rest of PWA meta tags ... -->
+
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
+
+    <!-- Your existing styles -->
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <!-- Mobile styles -->
+    <link rel="stylesheet" href="/static/css/mobile-styles.css">
+</head>
+<body>
+    <!-- Your existing content -->
+    <div class="container">
+        <!-- Mobile header -->
+        <header class="mobile-header">
+            <button class="menu-btn" id="menuBtn">☰</button>
+            <h1>VoiceVerse</h1>
+            <button class="install-btn-header" onclick="window.triggerPWAInstall()" style="display:none;">Install</button>
+        </header>
+
+        <!-- Your TTS form -->
+        <section class="tts-section">
+            <textarea id="tts-text" class="tts-textarea" placeholder="Enter text to convert to speech..."></textarea>
+
+            <div class="voice-selector">
+                <button class="voice-btn active" data-voice="alloy">Alloy</button>
+                <button class="voice-btn" data-voice="echo">Echo</button>
+                <button class="voice-btn" data-voice="fable">Fable</button>
+                <button class="voice-btn" data-voice="onyx">Onyx</button>
+                <button class="voice-btn" data-voice="nova">Nova</button>
+                <button class="voice-btn" data-voice="shimmer">Shimmer</button>
+            </div>
+
+            <button class="generate-btn" id="generateBtn">
+                <span>Generate Speech</span>
+            </button>
+        </section>
+
+        <!-- Audio library -->
+        <section class="audio-library">
+            <h2>Your Library</h2>
+            <div class="audio-list" id="audioList">
+                <!-- Audio cards will be populated here -->
+            </div>
+        </section>
+    </div>
+
+    <!-- PWA Scripts (copy from above) -->
+    <script src="/static/js/install-prompt.js" defer></script>
+
+    <!-- Your existing scripts -->
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
+-->
