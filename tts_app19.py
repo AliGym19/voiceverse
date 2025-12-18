@@ -1140,7 +1140,7 @@ def api_key_setup():
     user = db.get_user(username)
     has_key = user_has_api_key(user['id']) if user else False
 
-    return render_template(
+    return render_template_string(
         API_KEY_SETUP_TEMPLATE,
         has_key=has_key,
         error=request.args.get('error'),
