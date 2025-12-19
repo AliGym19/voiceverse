@@ -119,8 +119,8 @@ python3 -c "import flask; print('Flask version:', flask.__version__)"
 ### 5. Environment Configuration
 
 ```bash
-# Copy production environment template
-cp .env.production .env
+# Copy environment template
+cp .env.example .env
 
 # Generate strong SECRET_KEY
 python3 -c "import secrets; print('SECRET_KEY=' + secrets.token_hex(32))" >> .env
@@ -177,27 +177,7 @@ source venv/bin/activate
 python3 -c "from database import Database; db = Database(); print('Database initialized')"
 ```
 
-### 3. Migrate Existing Data (if applicable)
-
-If migrating from JSON-based storage:
-
-```bash
-# Backup existing data
-cp users.json users.json.backup
-cp audio_metadata.json audio_metadata.json.backup
-
-# Run migration script
-python3 migrate_to_sqlite.py
-
-# Verify migration
-python3 -c "from database import Database; db = Database(); print(f'Users: {len(db.get_all_users())}')"
-
-# Keep JSON backups for rollback
-mkdir -p backups
-mv *.json.backup backups/
-```
-
-### 4. Set Database Permissions
+### 3. Set Database Permissions
 
 ```bash
 # Set correct ownership and permissions
@@ -265,7 +245,11 @@ sudo chmod 644 /etc/ssl/voiceverse/fullchain.pem
 
 ```bash
 cd /var/www/voiceverse
-bash scripts/generate_dev_cert.sh
+mkdir -p certs
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout certs/dev-key.pem \
+    -out certs/dev-cert.pem \
+    -subj "/CN=localhost"
 ```
 
 ---
@@ -348,9 +332,6 @@ find /var/www/voiceverse -type d -exec chmod 750 {} \;
 
 # Set file permissions (640: owner rw, group r, other none)
 find /var/www/voiceverse -type f -exec chmod 640 {} \;
-
-# Executable scripts
-chmod 750 /var/www/voiceverse/scripts/*.sh
 
 # Protect sensitive files
 chmod 600 /var/www/voiceverse/.env

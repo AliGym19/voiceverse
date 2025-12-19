@@ -43,8 +43,8 @@ A beautiful, feature-rich web application for converting text to speech using Op
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/voiceverse.git
-   cd voiceverse
+   git clone https://github.com/AliGym19/voiceverse-tts.git
+   cd voiceverse-tts
    ```
 
 2. **Install dependencies**
@@ -54,31 +54,19 @@ A beautiful, feature-rich web application for converting text to speech using Op
 
 3. **Configure environment variables**
 
-   Create a `.env` file or set environment variables:
-
-   **Option A: Using .env file (Recommended)**
+   Create a `.env` file from the template:
    ```bash
-   # Copy development template
-   cp .env.development .env
+   # Copy the example template
+   cp .env.example .env
 
-   # Edit .env with your values
-   nano .env
+   # Generate a SECRET_KEY
+   python3 -c "import secrets; print('SECRET_KEY=' + secrets.token_hex(32))"
+   # Copy the output and paste it into your .env file
    ```
 
-   Add your API key and generate secrets:
-   ```bash
-   # Generate SECRET_KEY
-   python3 -c "import secrets; print('SECRET_KEY=' + secrets.token_hex(32))" >> .env
-
-   # Add your OpenAI API key
-   echo "OPENAI_API_KEY=your-api-key-here" >> .env
-   ```
-
-   **Option B: Environment Variables**
-   ```bash
-   export OPENAI_API_KEY='your-api-key-here'
-   export SECRET_KEY='your-secret-key-here'
-   ```
+   Edit `.env` and configure:
+   - `SECRET_KEY` - Paste your generated key
+   - `OPENAI_API_KEY` - Add your key OR leave blank (users can add their own in Settings)
 
 4. **Run the application**
    ```bash
@@ -90,26 +78,15 @@ A beautiful, feature-rich web application for converting text to speech using Op
    http://localhost:5000
    ```
 
-   Or with HTTPS (self-signed certificate):
-   ```bash
-   # Generate development certificate
-   bash scripts/generate_dev_cert.sh
-
-   # Enable HTTPS in .env
-   USE_HTTPS=true
-
-   # Access via HTTPS
-   https://localhost:5000
-   ```
-
 6. **Create an account**
    - Click "Sign Up"
    - Enter username and password
+   - Add your OpenAI API key in Settings (if not configured globally)
    - Start generating audio!
 
 ## 📋 Requirements
 
-Create a `requirements.txt` file with:
+Dependencies (installed via `pip install -r requirements.txt`):
 
 ```txt
 Flask>=2.3.0
@@ -117,6 +94,14 @@ openai>=1.0.0
 Werkzeug>=2.3.0
 PyPDF2>=3.0.0
 python-docx>=0.8.11
+python-dotenv>=1.0.0
+Flask-WTF>=1.2.0
+Flask-Limiter>=4.0.0
+cryptography>=41.0.0
+bcrypt>=4.0.0
+psutil>=5.9.0
+soundfile>=0.12.0
+numpy>=1.24.0
 ```
 
 ## 🎯 Usage
@@ -170,27 +155,33 @@ voiceverse/
 ├── tts_agents.py             # AI agents module
 ├── database.py               # Database abstraction layer
 ├── logger.py                 # Security logging module
-├── test_agents.py            # Agent tests
+├── encryption.py             # Encryption utilities
 ├── requirements.txt          # Python dependencies
 ├── README.md                 # This file
 ├── DEPLOYMENT.md             # Production deployment guide
 ├── SECURITY.md               # Security documentation
-├── IMPLEMENTATION_ROADMAP.md # Development roadmap
-├── .env.development          # Development environment template
-├── .env.production           # Production environment template
+├── .env.example              # Environment template (copy to .env)
 ├── .env                      # Active environment config (gitignored)
-├── .gitignore               # Git ignore rules
+├── .gitignore                # Git ignore rules
 ├── nginx.conf.example        # Nginx reverse proxy config
-├── scripts/                  # Utility scripts
-│   └── generate_dev_cert.sh # SSL certificate generator
+├── Dockerfile                # Docker container config
+├── docker-compose.yml        # Docker compose setup
+├── logging_config.json       # Logging configuration
+├── templates/                # HTML templates
+│   ├── index.html            # Main application page
+│   ├── auth.html             # Login/register page
+│   ├── settings.html         # User settings page
+│   └── error.html            # Error page
+├── features/                 # Feature modules
+│   ├── __init__.py
+│   └── analytics.py          # Usage analytics
+├── monitoring/               # Monitoring modules
+│   ├── __init__.py
+│   ├── log_analyzer.py       # Log analysis
+│   └── metrics_collector.py  # Metrics collection
 ├── certs/                    # SSL certificates (gitignored)
-│   ├── dev-cert.pem         # Development certificate
-│   └── dev-key.pem          # Development private key
-├── data/                     # Application data
-│   └── voiceverse.db        # SQLite database
-├── logs/                     # Application logs
-│   └── security_audit.log   # Security events log
-└── saved_audio/             # Generated audio storage
+├── logs/                     # Application logs (gitignored)
+└── saved_audio/              # Generated audio storage (gitignored)
 ```
 
 ## 🔧 Configuration
@@ -362,9 +353,6 @@ Before deploying to production:
 ### Project Documentation
 - **[DEPLOYMENT.md](DEPLOYMENT.md)** - Complete production deployment guide
 - **[SECURITY.md](SECURITY.md)** - Security features and best practices
-- **[IMPLEMENTATION_ROADMAP.md](IMPLEMENTATION_ROADMAP.md)** - Development phases and features
-- **[AI_AGENTS_README.md](AI_AGENTS_README.md)** - AI agents documentation
-- **[QUICK_START.md](QUICK_START.md)** - Quick start guide
 
 ### External Documentation
 - [OpenAI TTS API Docs](https://platform.openai.com/docs/guides/text-to-speech)
