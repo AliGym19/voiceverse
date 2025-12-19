@@ -67,6 +67,7 @@
             width: 280px;
             background-color: var(--spotify-darker);
             padding: 24px 16px;
+            padding-bottom: 110px; /* Space for fixed player bar */
             display: flex;
             flex-direction: column;
             gap: 16px;
@@ -395,6 +396,7 @@
             background-color: var(--spotify-dark);
             overflow-y: auto;
             padding: 24px;
+            padding-bottom: 110px; /* Space for fixed player bar */
         }
 
         .header {
@@ -824,6 +826,10 @@
         }
 
         .player-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
             height: 90px;
             background-color: var(--spotify-gray);
             border-top: 1px solid var(--spotify-darker);
@@ -831,6 +837,7 @@
             align-items: center;
             padding: 0 16px;
             gap: 16px;
+            z-index: 1000;
         }
 
         .now-playing {
@@ -2467,7 +2474,11 @@
 
         function groupContextDelete() {
             if (confirm(`Delete group "${currentGroupName}" and all its files?`)) {
-                fetch(`/delete-group/${encodeURIComponent(currentGroupName)}`, {method: 'POST'})
+                const csrfToken = document.querySelector('input[name="csrf_token"]')?.value;
+                fetch(`/delete-group/${encodeURIComponent(currentGroupName)}`, {
+                    method: 'POST',
+                    headers: csrfToken ? { 'X-CSRFToken': csrfToken } : {}
+                })
                     .then(response => {
                         if (response.ok) window.location.reload();
                         else alert('Failed to delete group');
@@ -2479,9 +2490,13 @@
         function confirmGroupRename() {
             const newName = document.getElementById('renameGroupInput').value.trim();
             if (newName && newName !== currentGroupName) {
+                const csrfToken = document.querySelector('input[name="csrf_token"]')?.value;
                 fetch(`/rename-group/${encodeURIComponent(currentGroupName)}`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(csrfToken && { 'X-CSRFToken': csrfToken })
+                    },
                     body: JSON.stringify({name: newName})
                 }).then(response => {
                     if (response.ok) window.location.reload();
@@ -2507,7 +2522,11 @@
 
         function contextDelete() {
             if (confirm(`Delete "${currentFileName}"?`)) {
-                fetch(`/delete/${encodeURIComponent(currentFilename)}`, {method: 'POST'})
+                const csrfToken = document.querySelector('input[name="csrf_token"]')?.value;
+                fetch(`/delete/${encodeURIComponent(currentFilename)}`, {
+                    method: 'POST',
+                    headers: csrfToken ? { 'X-CSRFToken': csrfToken } : {}
+                })
                     .then(response => {
                         if (response.ok) window.location.reload();
                         else alert('Failed to delete file');
@@ -2753,9 +2772,13 @@
         function confirmRename() {
             const newName = document.getElementById('renameInput').value.trim();
             if (newName && newName !== currentFileName) {
+                const csrfToken = document.querySelector('input[name="csrf_token"]')?.value;
                 fetch(`/rename/${encodeURIComponent(currentFilename)}`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(csrfToken && { 'X-CSRFToken': csrfToken })
+                    },
                     body: JSON.stringify({name: newName})
                 }).then(response => {
                     if (response.ok) window.location.reload();
@@ -3157,16 +3180,18 @@
 
             // Update title
             const titleEl = document.getElementById('sectionTitleText');
-            if (groupName) {
-                titleEl.textContent = `Group: ${groupName}`;
-                // Highlight active group
-                document.querySelectorAll('.group-item').forEach(item => {
-                    if (item.textContent.includes(groupName)) {
-                        item.classList.add('active');
-                    }
-                });
-            } else {
-                titleEl.textContent = 'Recent Files';
+            if (titleEl) {
+                if (groupName) {
+                    titleEl.textContent = `Group: ${groupName}`;
+                    // Highlight active group
+                    document.querySelectorAll('.group-item').forEach(item => {
+                        if (item.textContent.includes(groupName)) {
+                            item.classList.add('active');
+                        }
+                    });
+                } else {
+                    titleEl.textContent = 'Recent Files';
+                }
             }
         }
 
@@ -3217,9 +3242,13 @@
 
         async function addToHistory(filename, displayName) {
             try {
+                const csrfToken = document.querySelector('input[name="csrf_token"]')?.value;
                 await fetch('/api/add-to-history', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(csrfToken && { 'X-CSRFToken': csrfToken })
+                    },
                     body: JSON.stringify({
                         filename: filename,
                         display_name: displayName
@@ -3336,9 +3365,13 @@
             if (!confirm(`Delete ${selectedFiles.size} selected file(s)?`)) return;
 
             try {
+                const csrfToken = document.querySelector('input[name="csrf_token"]')?.value;
                 const response = await fetch('/bulk-delete', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(csrfToken && { 'X-CSRFToken': csrfToken })
+                    },
                     body: JSON.stringify({filenames: Array.from(selectedFiles)})
                 });
 
@@ -3413,9 +3446,13 @@
 
         async function moveToSelectedGroup(groupName) {
             try {
+                const csrfToken = document.querySelector('input[name="csrf_token"]')?.value;
                 const response = await fetch('/bulk-move', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(csrfToken && { 'X-CSRFToken': csrfToken })
+                    },
                     body: JSON.stringify({
                         filenames: Array.from(selectedFiles),
                         group: groupName
@@ -3439,9 +3476,13 @@
             if (!groupName || !groupName.trim()) return;
 
             try {
+                const csrfToken = document.querySelector('input[name="csrf_token"]')?.value;
                 const response = await fetch('/bulk-move', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(csrfToken && { 'X-CSRFToken': csrfToken })
+                    },
                     body: JSON.stringify({
                         filenames: Array.from(selectedFiles),
                         group: groupName.trim()
@@ -3516,9 +3557,12 @@
                 try {
                     const formData = new FormData();
                     formData.append('file', file);
+                    const csrfToken = document.querySelector('input[name="csrf_token"]')?.value;
+                    if (csrfToken) formData.append('csrf_token', csrfToken);
 
                     const response = await fetch('/api/parse-docx', {
                         method: 'POST',
+                        headers: csrfToken ? { 'X-CSRFToken': csrfToken } : {},
                         body: formData
                     });
 
@@ -3549,9 +3593,12 @@
                 try {
                     const formData = new FormData();
                     formData.append('file', file);
+                    const csrfTokenPdf = document.querySelector('input[name="csrf_token"]')?.value;
+                    if (csrfTokenPdf) formData.append('csrf_token', csrfTokenPdf);
 
                     const response = await fetch('/api/parse-pdf', {
                         method: 'POST',
+                        headers: csrfTokenPdf ? { 'X-CSRFToken': csrfTokenPdf } : {},
                         body: formData
                     });
 
@@ -3830,9 +3877,13 @@
             btn.innerHTML = '<span>⏳</span><span>Analyzing...</span>';
 
             try {
+                const csrfToken = document.querySelector('input[name="csrf_token"]')?.value;
                 const response = await fetch('/api/agent/suggest-metadata', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(csrfToken && { 'X-CSRFToken': csrfToken })
+                    },
                     body: JSON.stringify({text: text})
                 });
 
@@ -3939,9 +3990,13 @@
             btn.innerHTML = '<span>⏳</span><span>Analyzing...</span>';
 
             try {
+                const csrfToken = document.querySelector('input[name="csrf_token"]')?.value;
                 const response = await fetch('/api/agent/analyze', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(csrfToken && { 'X-CSRFToken': csrfToken })
+                    },
                     body: JSON.stringify({text: text})
                 });
 
@@ -4130,9 +4185,13 @@
             }
 
             try {
+                const csrfToken = document.querySelector('input[name="csrf_token"]')?.value;
                 const response = await fetch('/api/move-to-group', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(csrfToken && { 'X-CSRFToken': csrfToken })
+                    },
                     body: JSON.stringify({
                         filename: draggedFile.filename,
                         group: targetGroup
