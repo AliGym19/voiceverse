@@ -3467,16 +3467,6 @@ def metrics_dashboard():
 def favicon():
     return '', 204
 
-# Phase 4: Feature Enhancements
-try:
-    from phase4_routes import init_phase4_routes
-    init_phase4_routes(app)
-    print("[Phase 4] Feature enhancements loaded successfully")
-except ImportError as e:
-    print(f"[Phase 4] Warning: Could not load Phase 4 features: {e}")
-except Exception as e:
-    print(f"[Phase 4] Error initializing Phase 4 features: {e}")
-
 if __name__ == '__main__':
     if not os.getenv("OPENAI_API_KEY"):
         print("⚠️  WARNING: OPENAI_API_KEY environment variable is not set!")
