@@ -1,8 +1,9 @@
 # Environment and secrets
 .env
-.env.*
-!.env.example
+.env.development
+.env.production
 *.env.local
+!.env.example
 
 # Knowledge graph memory data (contains session-specific data)
 .aim/
@@ -12,6 +13,8 @@
 
 # Database
 voiceverse.db
+tts_data.db
+tts_users.db
 *.db
 *.sqlite
 *.sqlite3
@@ -31,13 +34,15 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 # Audio files (user generated content)
-saved_audio/
+saved_audio/*
+!saved_audio/.gitkeep
 *.mp3
 *.wav
 uploads/
 
 # Logs
-logs/
+logs/*
+!logs/.gitkeep
 *.log
 app.log
 
@@ -74,7 +79,7 @@ build/
 node_modules/
 package-lock.json
 
-# Backup files
+# Backup files and folders
 *.bak
 *.bak*
 *.backup
@@ -82,7 +87,7 @@ package-lock.json
 *.old
 *.old_*
 *.before_restore
-*~
+backup_*/
 
 # MCP configuration (local settings)
 .mcp.json
@@ -90,3 +95,54 @@ package-lock.json
 # Session files
 flask_session/
 sessions/
+
+# ===== PROJECT-SPECIFIC EXCLUSIONS =====
+
+# Old/deprecated app versions (keep only tts_app19.py)
+tts1.py
+tts2.py
+tts3.py
+ttsapp.py
+app_tts.py
+AItts.py
+tts_app.py
+tts_app_old.py
+tts_app_enhanced.py
+tts_app_cld.py
+tts_app_cld_*.py
+
+# Abandoned refactored folder
+tts_app_refactored/
+
+# Scripts folder (admin only, not for users)
+scripts/
+
+# Migration and utility scripts
+migrate_to_sqlite.py
+update_routes.py
+fix_file_save.py
+database_schema.sql
+test_agents.py
+
+# Deprecated route files
+aero_routes.py
+
+# Documentation files (keep only essential ones)
+QUICK_START_GUIDE.md
+QUICK_START.md
+AI_AGENTS_README.md
+SECURITY_IMPROVEMENTS.md
+IMPLEMENTATION_ROADMAP.md
+PHASE1_STATUS.md
+PHASE1_COMPLETION_STATUS.md
+DATABASE_INTEGRATION_GUIDE.md
+SECURITY_AUDIT_REPORT.md
+CHANGES.txt
+ADMIN_TOOLS_IMPLEMENTATION.md
+
+# HTML files (not needed)
+*.html
+!templates/*.html
+
+# JSON data files in saved_audio
+saved_audio/*.json

@@ -213,8 +213,6 @@ VALID_VOICES = {'alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'}
 # Security: Set up security audit logging
 import logging
 from logging.handlers import RotatingFileHandler
-from aero_routes import add_aero_routes
-
 
 # Create logs directory if it doesn't exist
 if not os.path.exists('logs'):
