@@ -1247,6 +1247,7 @@ def delete_api_key():
 
 
 @app.route('/api/settings/api-key/test', methods=['POST'])
+@csrf.exempt
 @login_required
 def test_api_key():
     """Test if the current API key is valid by making a simple API call."""
@@ -2222,6 +2223,7 @@ def get_history():
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/clear-history', methods=['POST'])
+@csrf.exempt
 def clear_history_endpoint():
     try:
         # Get user ID
@@ -2238,6 +2240,7 @@ def clear_history_endpoint():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/add-to-history', methods=['POST'])
+@csrf.exempt
 @login_required  # Security: Require authentication
 def add_to_history_endpoint():
     try:
@@ -2346,6 +2349,7 @@ def get_groups():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/move-to-group', methods=['POST'])
+@csrf.exempt
 def move_to_group():
     try:
         data = request.get_json()
@@ -2451,6 +2455,7 @@ def preview(voice):
         return f"Error: {str(e)}", 500
 
 @app.route('/api/parse-docx', methods=['POST'])
+@csrf.exempt
 @login_required  # Security: Require authentication for file uploads
 def parse_docx():
     try:
@@ -2497,6 +2502,7 @@ def parse_docx():
         return jsonify({'success': False, 'error': f'Error parsing DOCX file: {str(e)}'}), 500
 
 @app.route('/api/parse-pdf', methods=['POST'])
+@csrf.exempt
 @login_required  # Security: Require authentication for file uploads
 def parse_pdf():
     try:
@@ -2545,6 +2551,7 @@ def parse_pdf():
         return jsonify({'success': False, 'error': f'Error parsing PDF file: {str(e)}'}), 500
 
 @app.route('/api/agent/preprocess', methods=['POST'])
+@csrf.exempt
 @login_required
 def agent_preprocess():
     """AI agent: Preprocess text for optimal TTS"""
@@ -2570,6 +2577,7 @@ def agent_preprocess():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/agent/suggest-metadata', methods=['POST'])
+@csrf.exempt
 @login_required
 def agent_suggest_metadata():
     """AI agent: Suggest filename, category, voice"""
@@ -2602,6 +2610,7 @@ def agent_suggest_metadata():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/agent/analyze', methods=['POST'])
+@csrf.exempt
 @login_required
 def agent_analyze():
     """AI agent: Analyze text quality and provide recommendations"""
@@ -2624,6 +2633,7 @@ def agent_analyze():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/agent/smart-chunk', methods=['POST'])
+@csrf.exempt
 @login_required
 def agent_smart_chunk():
     """AI agent: Split text into optimal chunks"""
@@ -2649,6 +2659,7 @@ def agent_smart_chunk():
 
 # Voice Cloning API Endpoints
 @app.route('/api/voice-clone/upload-sample', methods=['POST'])
+@csrf.exempt
 @login_required
 def upload_voice_sample():
     """Upload a voice sample for cloning"""
@@ -2730,6 +2741,7 @@ def upload_voice_sample():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/voice-clone/generate', methods=['POST'])
+@csrf.exempt
 @login_required
 def generate_voice_clone():
     """Generate speech using voice cloning"""
@@ -2881,6 +2893,7 @@ def list_voice_samples():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/voice-clone/delete-sample', methods=['POST'])
+@csrf.exempt
 @login_required
 def delete_voice_sample():
     """Delete a voice sample"""
