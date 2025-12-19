@@ -9,29 +9,29 @@ A beautiful, feature-rich web application for converting text to speech using Op
 ## ✨ Features
 
 ### Core Features
-- 🎙️ **6 Premium Voices** - Choose from alloy, echo, fable, onyx, nova, and shimmer
-- 📝 **Smart Text Input** - Paste, type, or upload PDF/DOCX files
-- 🎵 **Built-in Audio Player** - Spotify-style player with volume control, seek, and playlist
-- 📚 **Audio Library** - Organize your audio files by groups/categories
-- 🔄 **Playback History** - Recently played tracks
-- 🌙 **Dark Mode UI** - Beautiful, modern interface
+-  **6 Premium Voices** - Choose from alloy, echo, fable, onyx, nova, and shimmer
+-  **Smart Text Input** - Paste, type, or upload PDF/DOCX files
+-  **Built-in Audio Player** - Spotify-style player with volume control, seek, and playlist
+-  **Audio Library** - Organize your audio files by groups/categories
+-  **Playback History** - Recently played tracks
+-  **Dark Mode UI** - Beautiful, modern interface
 
 ### AI Agent Features
-- 🤖 **Smart Text Preprocessing** - Automatically cleans and optimizes text for TTS
-- ✂️ **Intelligent Chunking** - Splits long texts at natural boundaries
-- 💡 **AI Suggestions** - Auto-generates filenames, categories, and voice recommendations
-- 📊 **Quality Analysis** - Checks text quality and estimates duration/cost
-- 🎯 **Voice Recommendations** - AI suggests the best voice for your content
+-  **Smart Text Preprocessing** - Automatically cleans and optimizes text for TTS
+-  **Intelligent Chunking** - Splits long texts at natural boundaries
+-  **AI Suggestions** - Auto-generates filenames, categories, and voice recommendations
+-  **Quality Analysis** - Checks text quality and estimates duration/cost
+-  **Voice Recommendations** - AI suggests the best voice for your content
 
 ### Advanced Features
-- 🔐 **User Authentication** - Secure login system with bcrypt password hashing
-- 🔒 **HTTPS/TLS Support** - Encrypted connections with self-signed or Let's Encrypt certificates
-- 🛡️ **Security Logging** - Comprehensive audit trails with PII protection
-- 💾 **Persistent Storage** - SQLite database with transaction safety
-- 📱 **Responsive Design** - Works on desktop and mobile
-- ⚡ **Real-time Generation** - Fast audio synthesis
-- 🔄 **Auto-save** - Never lose your audio files
-- 🌍 **Production Ready** - Full deployment guides with Nginx reverse proxy
+-  **User Authentication** - Secure login system with bcrypt password hashing
+-  **HTTPS/TLS Support** - Encrypted connections with self-signed or Let's Encrypt certificates
+-  **Security Logging** - Comprehensive audit trails with PII protection
+-  **Persistent Storage** - SQLite database with transaction safety
+-  **Responsive Design** - Works on desktop and soon on mobile
+-  **Real-time Generation** - Fast audio synthesis
+-  **Auto-save** - Never lose your audio files
+-  **Production Ready** - Full deployment guides with Nginx reverse proxy
 
 ## 🚀 Quick Start
 
@@ -411,6 +411,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Made with ❤️ using OpenAI TTS**
-
-*Star ⭐ this repo if you find it useful!*
