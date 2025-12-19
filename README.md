@@ -372,7 +372,7 @@ Contributions are welcome! Please follow these steps:
 ### Development Setup
 ```bash
 # Clone your fork
-git clone https://github.com/yourusername/voiceverse.git
+git clone https://github.com/AliGym19/voiceverse-tts.git
 
 # Create virtual environment
 python3 -m venv venv
@@ -380,9 +380,6 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
-
-# Run tests
-python3 test_agents.py
 ```
 
 ## 📝 License
@@ -397,12 +394,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📧 Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/voiceverse/issues)
-- **Documentation**: See `AI_AGENTS_README.md` and `QUICK_START.md`
+- **Issues**: [GitHub Issues](https://github.com/AliGym19/voiceverse-tts/issues)
 
 ## 🗺️ Roadmap
 
-- [ ] Voice cloning support
+- [x] Voice cloning support (Coqui TTS / XTTS v2)
 - [ ] Batch processing
 - [ ] Cloud storage integration
 - [ ] Mobile app
