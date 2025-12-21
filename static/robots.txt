@@ -1,0 +1,59 @@
+# robots.txt for VoiceVerse - AI Text-to-Speech Application
+# Optimized for AI agent crawlers and search engines
+
+User-agent: *
+Allow: /
+Allow: /api/
+Allow: /docs
+Allow: /api-docs
+Allow: /openapi.json
+Allow: /.well-known/
+
+# Sitemap location
+Sitemap: https://voiceverse.app/sitemap.xml
+
+# AI-specific endpoints for discovery
+Allow: /ai-info
+Allow: /capabilities
+
+# Disallow sensitive areas
+Disallow: /logout
+Disallow: /login
+Disallow: /register
+Disallow: /saved_audio/
+
+# Crawl delay (be respectful)
+Crawl-delay: 1
+
+# Specific AI agent user agents
+User-agent: GPTBot
+Allow: /
+Allow: /api/
+Allow: /docs
+
+User-agent: ChatGPT-User
+Allow: /
+Allow: /api/
+Allow: /docs
+
+User-agent: Claude-Web
+Allow: /
+Allow: /api/
+Allow: /docs
+
+User-agent: Google-Extended
+Allow: /
+Allow: /api/
+
+User-agent: CCBot
+Allow: /
+Allow: /api/
+
+User-agent: anthropic-ai
+Allow: /
+Allow: /api/
+Allow: /docs
+
+User-agent: cohere-ai
+Allow: /
+Allow: /api/
