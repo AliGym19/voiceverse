@@ -146,3 +146,5 @@ ADMIN_TOOLS_IMPLEMENTATION.md
 
 # JSON data files in saved_audio
 saved_audio/*.json
+# Personal session context (keep private)
+SESSION.md
